@@ -7,3 +7,8 @@
 - editorconfig (padroniza espaçamento)
 - prettier (padroniza identação, linhas, etc..)
 - eslint (orquestra a galera)
+
+### Resumo da arquitetura VCR
+- VIEW: Interface para o usuário interagir e inputar dados
+- CONTROLLER: Organizar as fontes de dados e define o fluxo de acontecimentos
+- REPOSITORY: Pega a origem do dado e confirma se ele ta certo
