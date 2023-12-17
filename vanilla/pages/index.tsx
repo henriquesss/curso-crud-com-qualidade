@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { GlobalStyles } from "@ui/theme/GlobalStyles";
 import { todoController } from "@ui/controller/todo";
 
@@ -10,14 +10,36 @@ interface HomeTodo {
 }
 
 function HomePage() {
+    // const [initialLoadComplete, setInitialLoadComplete] = useState(false);
+    const initialLoadComplete = useRef(false);
+    const [totalPages, setTotalPages] = useState(0);
     const [page, setPage] = useState(1);
+    const [search, setSearch] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
     const [todos, setTodos] = useState<HomeTodo[]>([]);
+    const homeTodos = todoController.filterTodosByContent<HomeTodo>(
+        search,
+        todos
+    );
+    const hasMorePages = totalPages > page;
+    const hasNoTodos = homeTodos.length === 0 && !isLoading;
 
     useEffect(() => {
-        todoController.get({ page }).then(({ todos }) => {
-            setTodos(todos);
-        });
-    }, []);
+        // setInitialLoadComplete(true);
+
+        if (!initialLoadComplete.current) {
+            todoController
+                .get({ page })
+                .then(({ todos, pages }) => {
+                    setTodos(todos);
+                    setTotalPages(pages);
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                    initialLoadComplete.current = true;
+                });
+        }
+    }, [page]);
 
     return (
         <main>
@@ -43,6 +65,9 @@ function HomePage() {
                     <input
                         type="text"
                         placeholder="Filtrar lista atual, ex: Dentista"
+                        onChange={function handleSearch(event) {
+                            setSearch(event.target.value);
+                        }}
                     />
                 </form>
 
@@ -59,7 +84,7 @@ function HomePage() {
                     </thead>
 
                     <tbody>
-                        {todos.map((currentTodo) => (
+                        {homeTodos.map((currentTodo) => (
                             <tr key={currentTodo.id}>
                                 <td>
                                     <input type="checkbox" />
@@ -72,45 +97,66 @@ function HomePage() {
                             </tr>
                         ))}
 
-                        {/* <tr>
-                            <td
-                                colSpan={4}
-                                align="center"
-                                style={{ textAlign: "center" }}
-                            >
-                                Carregando...
-                            </td>
-                        </tr> */}
-
-                        {/* <tr>
-                            <td colSpan={4} align="center">
-                                Nenhum item encontrado
-                            </td>
-                        </tr> */}
-
-                        <tr>
-                            <td
-                                colSpan={4}
-                                align="center"
-                                style={{ textAlign: "center" }}
-                            >
-                                <button
-                                    data-type="load-more"
-                                    onClick={() => setPage(page + 1)}
+                        {isLoading && (
+                            <tr>
+                                <td
+                                    colSpan={4}
+                                    align="center"
+                                    style={{ textAlign: "center" }}
                                 >
-                                    Página {page}, Carregar mais{" "}
-                                    <span
-                                        style={{
-                                            display: "inline-block",
-                                            marginLeft: "4px",
-                                            fontSize: "1.2em",
+                                    Carregando...
+                                </td>
+                            </tr>
+                        )}
+
+                        {hasNoTodos && (
+                            <tr>
+                                <td colSpan={4} align="center">
+                                    Nenhum item encontrado
+                                </td>
+                            </tr>
+                        )}
+
+                        {hasMorePages && (
+                            <tr>
+                                <td
+                                    colSpan={4}
+                                    align="center"
+                                    style={{ textAlign: "center" }}
+                                >
+                                    <button
+                                        data-type="load-more"
+                                        onClick={() => {
+                                            const nextPage = page + 1;
+                                            setPage(nextPage);
+
+                                            todoController
+                                                .get({ page: nextPage })
+                                                .then(({ todos, pages }) => {
+                                                    setTodos((oldTodos) => {
+                                                        return [
+                                                            ...oldTodos,
+                                                            ...todos,
+                                                        ];
+                                                    });
+                                                    setTotalPages(pages);
+                                                });
                                         }}
                                     >
-                                        ↓
-                                    </span>
-                                </button>
-                            </td>
-                        </tr>
+                                        Página {page}, Carregar mais{" "}
+                                        <span
+                                            style={{
+                                                display: "inline-block",
+                                                marginLeft: "4px",
+                                                fontSize: "1.2em",
+                                            }}
+                                        >
+                                            ↓
+                                        </span>
+                                    </button>
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </section>

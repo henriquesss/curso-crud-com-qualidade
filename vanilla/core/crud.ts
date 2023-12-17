@@ -15,7 +15,7 @@ interface Todo {
     done: boolean;
 }
 
-function create(content: string): Todo {
+export function create(content: string): Todo {
     const todo: Todo = {
         id: uuid(),
         date: new Date().toISOString(),
@@ -106,14 +106,17 @@ function CLEAR_DB() {
 // [SIMULATION]
 CLEAR_DB();
 create("Primeira TODO");
-const secondTodo = create("Primeira TODO");
-deleteById(secondTodo.id);
-const thirdTodo = create("Segunda TODO");
+// const secondTodo = create("Primeira TODO");
+// deleteById(secondTodo.id);
+// const thirdTodo = create("Segunda TODO");
+create("Segunda TODO");
+create("Terceira TODO");
+create("Quarta TODO");
 // update(thirdTodo.id, {
 //  content: "Atualizada",
 //  done: true,
 // })
-updateContentById(thirdTodo.id, "Atualizada!");
+// updateContentById(thirdTodo.id, "Atualizada!");
 const todos = read();
 console.log(todos);
 console.log(todos.length);

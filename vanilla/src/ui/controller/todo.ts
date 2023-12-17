@@ -1,16 +1,31 @@
 import { todoRepository } from "@ui/repository/todo";
 
 interface TodoControllerGetParams {
-    page?: number; // optional
+    page: number;
 }
 
-async function get({ page }: TodoControllerGetParams = {}) {
+async function get(params: TodoControllerGetParams) {
     return todoRepository.get({
-        page: page || 1,
-        limit: 10,
+        page: params.page,
+        limit: 2,
     });
+}
+
+function filterTodosByContent<Todo>(
+    search: string,
+    todos: Array<Todo & { content: string }> // Isso é loucura papai
+): Todo[] {
+    const homeTodos = todos.filter((todo) => {
+        const searchNormalized = search.toLowerCase();
+        const contentNormalized = todo.content.toLowerCase();
+
+        return contentNormalized.includes(searchNormalized);
+    });
+
+    return homeTodos;
 }
 
 export const todoController = {
     get,
+    filterTodosByContent,
 };
