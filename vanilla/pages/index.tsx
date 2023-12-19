@@ -12,6 +12,7 @@ interface HomeTodo {
 function HomePage() {
     // const [initialLoadComplete, setInitialLoadComplete] = useState(false);
     const initialLoadComplete = useRef(false);
+    const [newTodoContent, setNewTodoContent] = useState("");
     const [totalPages, setTotalPages] = useState(0);
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
@@ -52,8 +53,34 @@ function HomePage() {
                 <div className="typewriter">
                     <h1>O que fazer hoje?</h1>
                 </div>
-                <form>
-                    <input type="text" placeholder="Correr, Estudar..." />
+                <form
+                    onSubmit={(event) => {
+                        // Prevent the default behavior of form when 'enter' is pressed
+                        event.preventDefault();
+
+                        todoController.create({
+                            content: newTodoContent,
+                            onSuccess(todo: HomeTodo) {
+                                setTodos((oldTodos) => {
+                                    return [todo, ...oldTodos];
+                                });
+                            },
+                            onError() {
+                                alert(
+                                    "Você precisa ter um conteúdo para criar uma TODO!"
+                                );
+                            },
+                        });
+                    }}
+                >
+                    <input
+                        type="text"
+                        placeholder="Correr, Estudar..."
+                        value={newTodoContent}
+                        onChange={function newTodoHandler(event) {
+                            setNewTodoContent(event.target.value);
+                        }}
+                    />
                     <button type="submit" aria-label="Adicionar novo item">
                         +
                     </button>

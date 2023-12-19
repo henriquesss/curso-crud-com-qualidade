@@ -8,6 +8,9 @@
 - prettier (padroniza identação, linhas, etc..)
 - eslint (orquestra a galera)
 
+### Qualidade de código pra frontend
+- Tratar eventos (como a criação de uma TODO) utilizando onSuccess e onError ao fazer o submit desse evento ou request. Fica mais organizado e encaixa bem com essa arquitetura VCR
+
 ### Resumo da arquitetura VCR
 - VIEW: Interface para o usuário interagir e inputar dados
 - CONTROLLER: Organizar as fontes de dados e define o fluxo de acontecimentos
