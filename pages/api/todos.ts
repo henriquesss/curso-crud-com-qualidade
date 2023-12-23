@@ -16,6 +16,8 @@ export default function handler(
     }
 
     response.status(405).json({
-        message: "Method not allowed",
+        error: {
+            message: "Method not allowed",
+        },
     });
 }

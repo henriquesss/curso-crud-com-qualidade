@@ -1,0 +1,29 @@
+{
+  "todos": [
+    {
+      "id": "7df7c93a-e5ab-4977-9cb3-92e563971f06",
+      "date": "2023-12-23T19:20:00.726Z",
+      "content": "Primeira TODO",
+      "done": false
+    },
+    {
+      "id": "7e027444-6215-43b2-a588-16270c4b6abc",
+      "date": "2023-12-23T19:20:00.726Z",
+      "content": "Segunda TODO",
+      "done": false
+    },
+    {
+      "id": "ba653cca-598c-42bf-989f-8f5fbee71da6",
+      "date": "2023-12-23T19:20:00.727Z",
+      "content": "Terceira TODO",
+      "done": false
+    },
+    {
+      "id": "dd97f480-7b24-4197-b9b8-5f48334cc5c8",
+      "date": "2023-12-23T19:20:00.727Z",
+      "content": "Quarta TODO",
+      "done": false
+    }
+  ],
+  "dogs": []
+}

@@ -51,9 +51,10 @@ export function read(): Array<Todo> {
     return db.todos;
 }
 
-function update(id: UUID, partialTodo: Partial<Todo>): Todo {
+export function update(id: UUID, partialTodo: Partial<Todo>): Todo {
     let updatedTodo;
     const todos = read();
+    console.log("LEU? =>", todos)
     todos.forEach((currentTodo) => {
         const isToUpdate = currentTodo.id === id;
         if (isToUpdate) updatedTodo = Object.assign(currentTodo, partialTodo);
