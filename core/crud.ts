@@ -80,7 +80,7 @@ function updateContentById(id: UUID, content: string): Todo {
     return update(id, { content });
 }
 
-function deleteById(id: UUID) {
+export function deleteById(id: UUID) {
     const todos = read();
 
     const todosWithoutOne = todos.filter((todo) => {

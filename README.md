@@ -13,6 +13,11 @@
 - Real update: Update acontece de forma síncrona (ocorre o update e o resultado da operação junto)
 - Optimistic update: Atualiza independentemente do resultado da operação
 
+### Qualidade de código pra backend
+- Utilizar uma pasta `infra` na sua api pra comportar recursos que mantém a consistência do seu código, como erros customizados, validações, etc..
+- Criar classes de erro extendendo a classe Error padrão do JS
+- Cuidado ao expôr erros para o cliente: há sempre pessoas tentando exploitar algo
+
 ### Resumo da arquitetura VCR
 - VIEW: Interface para o usuário interagir e inputar dados
 - CONTROLLER: Organizar as fontes de dados e define o fluxo de acontecimentos
