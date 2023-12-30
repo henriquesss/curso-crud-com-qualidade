@@ -10,6 +10,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}'",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "test": "start-server-and-test dev http://localhost:3000 cy:run",
     "lint:fix": "npm run lint -- --fix"
   },
   "keywords": [],
@@ -17,6 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/uuid": "^9.0.7",
+    "cypress": "^13.6.2",
     "next": "^14.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
