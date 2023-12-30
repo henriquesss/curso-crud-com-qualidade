@@ -2,141 +2,148 @@ import { z as schema } from "zod";
 import { Todo, TodoSchema } from "@ui/schema/todo";
 
 interface TodoRepositoryGetParams {
-    page: number;
-    limit: number;
+  page: number;
+  limit: number;
 }
 interface TodoRepositoryGetOutput {
-    todos: Todo[];
-    total: number;
-    pages: number;
+  todos: Todo[];
+  total: number;
+  pages: number;
 }
 
 function get({
-    page,
-    limit,
+  page,
+  limit,
 }: TodoRepositoryGetParams): Promise<TodoRepositoryGetOutput> {
-    return fetch(`/api/todos?page=${page}&limit=${limit}`)
-        .then(async (serverResponse) => {
-            const todosString = await serverResponse.text();
-            const responseParsed = parseTodosFromServer(
-                JSON.parse(todosString)
-            );
+  return fetch(`/api/todos?page=${page}&limit=${limit}`)
+    .then(async (serverResponse) => {
+      const todosString = await serverResponse.text();
+      const responseParsed = parseTodosFromServer(JSON.parse(todosString));
 
-            return {
-                total: responseParsed.total,
-                todos: responseParsed.todos,
-                pages: responseParsed.pages,
-            };
-        })
-        .catch((error) => {
-            // eslint-disable-next-line no-console
-            console.log(error);
-        });
+      return {
+        total: responseParsed.total,
+        todos: responseParsed.todos,
+        pages: responseParsed.pages,
+      };
+    })
+    .catch((error) => {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    });
 }
 
 export async function createByContent(content: string): Promise<Todo> {
-    const response = await fetch("/api/todos", {
-        method: "POST",
-        headers: {
-            // MIME Type
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            content,
-        }),
+  const response = await fetch("/api/todos", {
+    method: "POST",
+    headers: {
+      // MIME Type
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      content,
+    }),
+  });
+
+  if (response.ok) {
+    const serverResponse = await response.json();
+
+    const ServerResponseSchema = schema.object({
+      todo: TodoSchema,
     });
+    const serverResponseParsed = ServerResponseSchema.safeParse(serverResponse);
 
-    if (response.ok) {
-        const serverResponse = await response.json();
-
-        const ServerResponseSchema = schema.object({
-            todo: TodoSchema,
-        });
-        const serverResponseParsed =
-            ServerResponseSchema.safeParse(serverResponse);
-
-        if (!serverResponseParsed.success) {
-            throw new Error("Failed to create TODO :(");
-        }
-
-        const todo = serverResponseParsed.data.todo;
-        return todo;
+    if (!serverResponseParsed.success) {
+      throw new Error("Failed to create TODO :(");
     }
 
-    throw new Error("Failed to create TODO :(");
+    const todo = serverResponseParsed.data.todo;
+    return todo;
+  }
+
+  throw new Error("Failed to create TODO :(");
 }
 
 async function toggleDone(todoId: string): Promise<Todo> {
-    const response = await fetch(`/api/todos/${todoId}/toggle-done`, {
-        method: "PUT",
+  const response = await fetch(`/api/todos/${todoId}/toggle-done`, {
+    method: "PUT",
+  });
+
+  if (response.ok) {
+    const serverResponse = await response.json();
+    const ServerResponseSchema = schema.object({
+      todo: TodoSchema,
     });
-
-    if (response.ok) {
-        const serverResponse = await response.json();
-        const ServerResponseSchema = schema.object({
-            todo: TodoSchema,
-        });
-        const serverResponseParsed =
-            ServerResponseSchema.safeParse(serverResponse);
-        if (!serverResponseParsed.success) {
-            throw new Error(`Failed to update TODO with id ${todoId}`);
-        }
-
-        const updatedTodo = serverResponseParsed.data.todo;
-        return updatedTodo;
+    const serverResponseParsed = ServerResponseSchema.safeParse(serverResponse);
+    if (!serverResponseParsed.success) {
+      throw new Error(`Failed to update TODO with id ${todoId}`);
     }
 
-    throw new Error("Server error");
+    const updatedTodo = serverResponseParsed.data.todo;
+    return updatedTodo;
+  }
+
+  throw new Error("Server error");
+}
+
+async function deleteById(id: string) {
+  const response = await fetch(`/api/todos/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete");
+  }
 }
 
 export const todoRepository = {
-    get,
-    createByContent,
-    toggleDone,
+  get,
+  createByContent,
+  toggleDone,
+  deleteById,
 };
 
 // Security layer to verify returns of API
 // Obs: Each company has the own business rules to implement here
 function parseTodosFromServer(responseBody: unknown): {
-    total: number;
-    pages: number;
-    todos: Array<Todo>;
+  total: number;
+  pages: number;
+  todos: Array<Todo>;
 } {
-    if (
-        responseBody !== null &&
-        typeof responseBody === "object" &&
-        "todos" in responseBody &&
-        "total" in responseBody &&
-        "pages" in responseBody &&
-        Array.isArray(responseBody.todos)
-    ) {
-        return {
-            total: Number(responseBody.total),
-            pages: Number(responseBody.pages),
-            todos: responseBody.todos.map((todo: unknown) => {
-                if (todo === null && typeof todo !== "object")
-                    throw new Error("Invalid todo from API");
-
-                const { id, content, done, date } = todo as {
-                    id: string;
-                    content: string;
-                    date: string;
-                    done: string;
-                };
-
-                return {
-                    id,
-                    content,
-                    done: String(done).toLowerCase() === "true",
-                    date: date,
-                };
-            }),
-        };
-    }
-
+  if (
+    responseBody !== null &&
+    typeof responseBody === "object" &&
+    "todos" in responseBody &&
+    "total" in responseBody &&
+    "pages" in responseBody &&
+    Array.isArray(responseBody.todos)
+  ) {
     return {
-        pages: 1,
-        total: 0,
-        todos: [],
+      total: Number(responseBody.total),
+      pages: Number(responseBody.pages),
+      todos: responseBody.todos.map((todo: unknown) => {
+        if (todo === null && typeof todo !== "object")
+          throw new Error("Invalid todo from API");
+
+        const { id, content, done, date } = todo as {
+          id: string;
+          content: string;
+          date: string;
+          done: string;
+        };
+
+        return {
+          id,
+          content,
+          done: String(done).toLowerCase() === "true",
+          date: date,
+        };
+      }),
     };
+  }
+
+  return {
+    pages: 1,
+    total: 0,
+    todos: [],
+  };
 }
