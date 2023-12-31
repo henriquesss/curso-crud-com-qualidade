@@ -34,9 +34,9 @@ interface TodoControllerCreateParams {
 }
 function create({ content, onSuccess, onError }: TodoControllerCreateParams) {
   // Fail Fast
-  const parsedParams = schema.string().nonempty().safeParse(content);
+  const parsedParams = schema.string().min(1).safeParse(content);
 
-  if (parsedParams.success) {
+  if (!parsedParams.success) {
     onError();
     return;
   }

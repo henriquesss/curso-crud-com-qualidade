@@ -6,17 +6,21 @@
 ### Tooling para qualidade do código
 - editorconfig (padroniza espaçamento)
 - prettier (padroniza identação, linhas, etc..)
-- eslint (orquestra a galera)
+- eslint (orquestra o prettier e o editorconfig)
+- cypress (testes e2e)
 
 ### Qualidade de código pra frontend
 - Tratar eventos (como a criação de uma TODO) utilizando onSuccess e onError ao fazer o submit desse evento ou request. Fica mais organizado e encaixa bem com essa arquitetura VCR
 - Real update: Update acontece de forma síncrona (ocorre o update e o resultado da operação junto)
 - Optimistic update: Atualiza independentemente do resultado da operação
+- Ao criar um teste no frontend, o padrão `describe("/rota - Contexto")` tende a ser mais organizado (por páginas) mas também pode ser feito por seções da aplicação, dependendo da complexidade da UI
+- Utilize os parâmetros de acessibilidade da web sempre que possível, como o `name`
 
 ### Qualidade de código pra backend
 - Utilizar uma pasta `infra` na sua api pra comportar recursos que mantém a consistência do seu código, como erros customizados, validações, etc..
 - Criar classes de erro extendendo a classe Error padrão do JS
 - Cuidado ao expôr erros para o cliente: há sempre pessoas tentando exploitar algo
+
 
 ### Resumo da arquitetura VCR
 - VIEW: Interface para o usuário interagir e inputar dados
