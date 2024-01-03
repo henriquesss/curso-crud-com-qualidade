@@ -31,3 +31,6 @@
 - Use um estado 'isLoading' global setado como true e só sete ele para false quando seu request dentro do useEffect() tiver carregado e alimentado todas as informações necessárias para a página
 - Quando for validar o estado 'Não há items' ou 'Items não encontrados', crie uma constante contendo uma condição que verifique `items.length === 0 && !isLoading`
 - Use o `useRef` pra quando precisar atualizar um estado e não quiser RE-RENDERIZAR o componente inteiro
+
+# Continuous integration && continuous deployment (CI/CD)
+![ci workflow](https://miro.medium.com/v2/resize:fit:1000/0*LX8FM8Z26sgxv6BT.png)
