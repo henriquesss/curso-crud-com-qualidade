@@ -9,5 +9,10 @@ jobs:
     lint: 
         runs-on: ubuntu-latest
         steps: 
+        ## [Commom_CI_Steps]
+          - uses: actions/checkout@v3
+        ## =================
+          - name: "Install depedencies"
+            run: "npm install"
           - name: "Lint"
-            run: "echo 'alo alo'"
+            run: "npm run lint'"

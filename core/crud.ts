@@ -9,99 +9,99 @@ console.log("[CRUD]");
 type UUID = string;
 
 interface Todo {
-    id: UUID;
-    date: string;
-    content: string;
-    done: boolean;
+  id: UUID;
+  date: string;
+  content: string;
+  done: boolean;
 }
 
 export function create(content: string): Todo {
-    const todo: Todo = {
-        id: uuid(),
-        date: new Date().toISOString(),
-        content: content,
-        done: false,
-    };
+  const todo: Todo = {
+    id: uuid(),
+    date: new Date().toISOString(),
+    content: content,
+    done: false,
+  };
 
-    const todos: Array<Todo> = [...read(), todo];
+  const todos: Array<Todo> = [...read(), todo];
 
-    // salvar o content no sistema
-    fs.writeFileSync(
-        DB_FILE_PATH,
-        JSON.stringify(
-            {
-                todos,
-                dogs: [],
-            },
-            null,
-            2
-        )
-    );
-    return todo;
+  // salvar o content no sistema
+  fs.writeFileSync(
+    DB_FILE_PATH,
+    JSON.stringify(
+      {
+        todos,
+        dogs: [],
+      },
+      null,
+      2
+    )
+  );
+  return todo;
 }
 
 export function read(): Array<Todo> {
-    const dbString = fs.readFileSync(DB_FILE_PATH, "utf-8");
-    const db = JSON.parse(dbString || "{}");
-    if (!db.todos) {
-        // Fail Fast Validations
-        return [];
-    }
+  const dbString = fs.readFileSync(DB_FILE_PATH, "utf-8");
+  const db = JSON.parse(dbString || "{}");
+  if (!db.todos) {
+    // Fail Fast Validations
+    return [];
+  }
 
-    return db.todos;
+  return db.todos;
 }
 
 export function update(id: UUID, partialTodo: Partial<Todo>): Todo {
-    let updatedTodo;
-    const todos = read();
-    console.log("LEU? =>", todos)
-    todos.forEach((currentTodo) => {
-        const isToUpdate = currentTodo.id === id;
-        if (isToUpdate) updatedTodo = Object.assign(currentTodo, partialTodo);
-    });
+  let updatedTodo;
+  const todos = read();
+  console.log("LEU? =>", todos);
+  todos.forEach((currentTodo) => {
+    const isToUpdate = currentTodo.id === id;
+    if (isToUpdate) updatedTodo = Object.assign(currentTodo, partialTodo);
+  });
 
-    fs.writeFileSync(
-        DB_FILE_PATH,
-        JSON.stringify(
-            {
-                todos,
-            },
-            null,
-            2
-        )
-    );
+  fs.writeFileSync(
+    DB_FILE_PATH,
+    JSON.stringify(
+      {
+        todos,
+      },
+      null,
+      2
+    )
+  );
 
-    if (!updatedTodo) throw new Error("Please, provide another ID!");
+  if (!updatedTodo) throw new Error("Please, provide another ID!");
 
-    return updatedTodo;
+  return updatedTodo;
 }
 
-function updateContentById(id: UUID, content: string): Todo {
-    return update(id, { content });
+export function updateContentById(id: UUID, content: string): Todo {
+  return update(id, { content });
 }
 
 export function deleteById(id: UUID) {
-    const todos = read();
+  const todos = read();
 
-    const todosWithoutOne = todos.filter((todo) => {
-        if (id === todo.id) return false;
-        return true;
-    });
+  const todosWithoutOne = todos.filter((todo) => {
+    if (id === todo.id) return false;
+    return true;
+  });
 
-    fs.writeFileSync(
-        DB_FILE_PATH,
-        JSON.stringify(
-            {
-                todos: todosWithoutOne,
-            },
-            null,
-            2
-        )
-    );
+  fs.writeFileSync(
+    DB_FILE_PATH,
+    JSON.stringify(
+      {
+        todos: todosWithoutOne,
+      },
+      null,
+      2
+    )
+  );
 }
 
 function CLEAR_DB() {
-    fs.writeFileSync(DB_FILE_PATH, "");
+  fs.writeFileSync(DB_FILE_PATH, "");
 }
 
 // [SIMULATION]

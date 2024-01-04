@@ -156,7 +156,7 @@ function HomePage() {
                     onClick={function handleClick() {
                       todoController
                         .deleteById(currentTodo.id)
-                        .then((response) => {
+                        .then(() => {
                           setTodos((currentTodos) => {
                             return currentTodos.filter((ctodo) => {
                               return ctodo.id !== currentTodo.id;

@@ -6,7 +6,14 @@ module.exports = {
     node: true,
     "cypress/globals": true,
   },
-  plugins: ["react", "prettier", "@typescript-eslint", "cypress", "chai-friendly", "no-only-tests"],
+  plugins: [
+    "react",
+    "prettier",
+    "@typescript-eslint",
+    "cypress",
+    "chai-friendly",
+    "no-only-tests",
+  ],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -29,7 +36,7 @@ module.exports = {
   // Cherry of the Cake
   rules: {
     "no-only-tests/no-only-tests": "error",
-    "no-console": ["error", { allow: ["warn", "error"]}],
+    "no-console": ["error", { allow: ["warn", "error"] }],
     "react/no-unknown-property": ["error", { ignore: ["jsx", "global"] }],
   },
 };

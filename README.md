@@ -34,3 +34,10 @@
 
 # Continuous integration && continuous deployment (CI/CD)
 ![ci workflow](https://miro.medium.com/v2/resize:fit:1000/0*LX8FM8Z26sgxv6BT.png)
+
+Dicas pra usar no github:
+- Pra barrar commits e merge requests que não tiveram todos os status do CI com 'check', vá em `Settings > Branches > Add branch protection rule` and set:
+- [x] Require a pull request before merging
+- [x] Require status checks to pass before merging
+    - [x] Require branches to be up to date before merging
+    - [] Selecione o nome do job que você quer verificar os 'checks'

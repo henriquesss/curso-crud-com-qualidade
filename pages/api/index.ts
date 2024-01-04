@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default function handler(
-    request: NextApiRequest,
-    response: NextApiResponse
+  request: NextApiRequest,
+  response: NextApiResponse
 ) {
-    response.status(200).json({ message: "AUAUAUAU" });
+  response.status(200).json({ message: "AUAUAUAU" });
 }

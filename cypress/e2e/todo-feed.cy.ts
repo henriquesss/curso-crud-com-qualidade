@@ -6,7 +6,7 @@ describe("/ - Todos Feed", () => {
     cy.visit(BASE_URL);
   });
 
-  it.only("when create a new todo, it must be appears in the screen", () => {
+  it("when create a new todo, it must be appears in the screen", () => {
     // 0 - Interception
     cy.intercept("POST", `${BASE_URL}/api/todos`, (request) => {
       request.reply({
