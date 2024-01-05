@@ -41,3 +41,4 @@ Dicas pra usar no github:
 - [x] Require status checks to pass before merging
     - [x] Require branches to be up to date before merging
     - [] Selecione o nome do job que você quer verificar os 'checks'
+- Ao criar uma pipeline de CI/CD, priorize processos manuais pois plugins prontos podem quebrar todo seu fluxo de entrega e também modificar seu `time to release`

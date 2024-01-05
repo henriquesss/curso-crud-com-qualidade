@@ -19,6 +19,7 @@
   "author": "Lucas Henriques",
   "license": "ISC",
   "dependencies": {
+    "@supabase/supabase-js": "^2.39.2",
     "@types/uuid": "^9.0.7",
     "cypress": "^13.6.2",
     "next": "^14.0.3",
