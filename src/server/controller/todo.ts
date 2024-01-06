@@ -52,12 +52,22 @@ async function create(req: NextApiRequest, res: NextApiResponse) {
     return;
   }
 
-  // Here er have the data
-  const createdTodo = await todoRepository.createdByContent(body.data.content);
+  // Here we have the data
+  try {
+    const createdTodo = await todoRepository.createdByContent(
+      body.data.content
+    );
 
-  res.status(201).json({
-    todo: createdTodo,
-  });
+    res.status(201).json({
+      todo: createdTodo,
+    });
+  } catch (error) {
+    res.status(400).json({
+      error: {
+        message: "Failed to create Todo",
+      },
+    });
+  }
 }
 
 async function toggleDone(req: NextApiRequest, res: NextApiResponse) {
