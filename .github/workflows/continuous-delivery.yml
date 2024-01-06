@@ -1,0 +1,30 @@
+name: "[CD] Continuous Delivery"
+
+# Para uso em produção
+#on:
+#    push:
+#        branches: [ main ]
+
+# Sempre que tiver um commit ou um PR for aberto
+on:
+    pull_request:
+        types: [opened, syncronize]
+
+    env:
+        VERCEL_ORG_ID: "vercel/project.json/VERCEL_ORG_ID"
+        VERCEL_PROJECT_ID: "vercel/project.json/VERCEL_PROJECT_ID"
+
+    jobs:
+        deploy: 
+            runs-on: ubuntu-latest
+            steps: 
+                ## [Commom_CI_Steps]
+            - uses: actions/checkout@v3
+                ## =================
+            - name: "Debug"
+                run: |
+                 ls -la
+            - name: "Install depedencies"
+                run: "npm install"
+            - name: "Deploy"
+                run: "npx vercel --prod --token=${{ secrets.VERCEL.TOKEN }}'"

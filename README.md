@@ -42,3 +42,9 @@ Dicas pra usar no github:
     - [x] Require branches to be up to date before merging
     - [] Selecione o nome do job que você quer verificar os 'checks'
 - Ao criar uma pipeline de CI/CD, priorize processos manuais pois plugins prontos podem quebrar todo seu fluxo de entrega e também modificar seu `time to release`
+
+Dicas de deploy (Vercel/github)
+- Não subir .env NUNCA (e caso queira ignorar algum arquivo ou pasta, não esqueça do .gitignore ou .vercelignore)
+- Insira as variáveis de ambiente diretamente na plataforma da Vercel
+- Pra poder rodar automações com a Vercel, crie um TOKEN dentro da plataforma da Vercel indo em `Profile > Settings > Tokens`. É necessário utilizar esse token pra que as automações não demandem autenticação toda hora
+- Para utilizar 'segredos' dentro dos CI/CD, vá em `projeto > settings > secrets and variables > actions` e crie uma variável de ambiente pra usar nas automações
